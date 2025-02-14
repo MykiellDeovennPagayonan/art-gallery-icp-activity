@@ -3,7 +3,7 @@ type Artwork = {
   imageUrl: string,
   title: string,
   description: string,
-  comments: Comment[]
+  comments?: Comment[]
 }
 
 type Comment = {      

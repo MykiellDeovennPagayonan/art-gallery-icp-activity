@@ -1,4 +1,4 @@
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import { CardBody, CardContainer } from "./ui/3d-card";
 import {
@@ -36,12 +36,10 @@ export default function Arts({ imageUrl, title, description }: ArtsProps) {
         <CardContainer className="inter-var w-full h-full flex justify-center items-center">
           <CardBody className="relative rounded-2xl border-2 border-gray-400 shadow-xl overflow-hidden cursor-pointer">
             <div onClick={() => setIsOpen(true)}>
-              <Image
+              <img
                 src={imageUrl}
-                alt="Profile image"
-                width={800}
-                height={600}
-                className="object-cover w-full h-full rounded-2xl"
+                alt={title}
+                className="object-fill h-full max-h-[90vh] w-full rounded-2xl"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 p-4">
                 <h3 className="text-xl font-semibold text-white">{title}</h3>
@@ -57,9 +55,9 @@ export default function Arts({ imageUrl, title, description }: ArtsProps) {
             <DialogDescription>{description}</DialogDescription>
           </DialogHeader>
           <div className="w-full">
-            <Image
+            <img
               src={imageUrl}
-              alt="Profile image"
+              alt={title}
               width={800}
               height={600}
               className="object-cover w-full rounded-lg"
