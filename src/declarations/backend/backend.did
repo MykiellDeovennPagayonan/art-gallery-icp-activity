@@ -1,0 +1,10 @@
+type Comment = 
+ record {
+   imageUrl: text;
+   "text": text;
+   timestamp: int;
+ };
+service : {
+  createComment: (text, text) -> (vec Comment);
+  getAllComments: () -> (vec Comment) query;
+}

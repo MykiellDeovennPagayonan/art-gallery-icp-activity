@@ -5,9 +5,3 @@ type Artwork = {
   description: string,
   comments?: Comment[]
 }
-
-type Comment = {      
-  imageUrl: string,  
-  text: string,    
-  timestamp: number, 
-}

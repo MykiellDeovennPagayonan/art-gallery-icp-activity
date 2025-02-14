@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+"use client";
+
+import { useState, useEffect } from "react";
 import { CardBody, CardContainer } from "./ui/3d-card";
 import {
   Dialog,
@@ -10,23 +12,58 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "./ui/input";
 import { Button } from "@/components/ui/button";
+import { backend } from "@/declarations/backend";
+import { Comment } from "@/lib/interface";
 
 interface ArtsProps {
-  imageUrl: string,
-  title: string,
-  description: string,
+  imageUrl: string;
+  title: string;
+  description: string;
+  initialComments: Comment[];
 }
 
-export default function Arts({ imageUrl, title, description }: ArtsProps) {
+export default function Arts({
+  imageUrl,
+  title,
+  description,
+  initialComments,
+}: ArtsProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [comments, setComments] = useState<string[]>([]);
+  const [comments, setComments] = useState<Comment[]>([...initialComments].sort((a, b) => {
+    return Number(a.timestamp) - Number(b.timestamp);
+  }));
   const [newComment, setNewComment] = useState("");
+  const [isPosting, setIsPosting] = useState(false);
 
-  const handleAddComment = (event: React.FormEvent) => {
+  useEffect(() => {
+    if (initialComments) {
+      const sortedInitialComments = [...initialComments].sort((a, b) => {
+        return Number(a.timestamp) - Number(b.timestamp);
+      });
+      setComments(sortedInitialComments)
+    }
+  }, [initialComments])
+
+  const handleAddComment = async (event: React.FormEvent) => {
     event.preventDefault();
     if (newComment.trim()) {
-      setComments([...comments, newComment]);
-      setNewComment("");
+      setIsPosting(true); // Start loading
+      try {
+        const updatedComments: Comment[] = await backend.createComment(
+          imageUrl,
+          newComment
+        );
+        const sortedComments = [...updatedComments].sort((a, b) => {
+          return Number(a.timestamp) - Number(b.timestamp);
+        });
+        const artworkSortedComments = sortedComments ? sortedComments.filter(comment => comment.imageUrl === imageUrl) : []
+        setComments(artworkSortedComments);
+        setNewComment("");
+      } catch (error) {
+        console.error("Error posting comment:", error);
+      } finally {
+        setIsPosting(false);
+      }
     }
   };
 
@@ -68,8 +105,11 @@ export default function Arts({ imageUrl, title, description }: ArtsProps) {
             <div className="max-h-72 overflow-y-auto border rounded-md px-2 py-1">
               {comments.length > 0 ? (
                 comments.map((comment, index) => (
-                  <p key={index} className="text-sm text-gray-700 border-b py-1 last:border-none">
-                    <span className="font-bold"> Anonymous: </span> {comment}
+                  <p
+                    key={index}
+                    className="text-sm text-gray-700 border-b py-1 last:border-none"
+                  >
+                    <span className="font-bold">Anonymous: </span> {comment.text}
                   </p>
                 ))
               ) : (
@@ -84,8 +124,8 @@ export default function Arts({ imageUrl, title, description }: ArtsProps) {
                 onChange={(e) => setNewComment(e.target.value)}
                 className="flex-1"
               />
-              <Button type="submit" className="self-end">
-                Post
+              <Button type="submit" className="self-end" disabled={isPosting}>
+                {isPosting ? "Posting..." : "Post"} {/* Display loading text or normal text */}
               </Button>
             </form>
           </div>
