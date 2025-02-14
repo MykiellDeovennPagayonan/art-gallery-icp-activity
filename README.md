@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mokoto Devcon ICP Full Stack Template
 
-## Getting Started
+This is a Next.js-based full-stack template for building applications on the Internet Computer (ICP) using Mokoto.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 15** - Modern React framework for server-side rendering and static site generation.
+- **Mokoto** - Integration with ICP for decentralized applications.
+- **Canisters** - Backend services deployed on the Internet Computer.
+- **Tailwind CSS** - Utility-first CSS framework for styling.
+- **Typescript** - Type-safe development environment.
+- **IC SDK** - Internet Computer SDK for interacting with canisters.
+
+## Installation
+
+### Prerequisites
+Ensure you have the following installed:
+- Node.js (v20 or later)
+- DFX SDK (for deploying to ICP)
+- Yarn or npm
+
+### Clone the Repository
+```sh
+git clone https://github.com/MykiellDeovennPagayonan/art-gallery-icp-activity
+cd art-gallery-icp-activity
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install Dependencies
+```sh
+yarn install
+# or
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running the Development Server
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Start the local Internet Computer replica, create the backend canister, and then start the development server:
+```sh
+dfx start --background
+```
+```sh
+dfx canister create backend
+```
+```sh
+npm run dev
+```
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+## Deploying to the Internet Computer
 
-To learn more about Next.js, take a look at the following resources:
+To deploy your application:
+```sh
+dfx start --background
+```
+```sh
+dfx deploy
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create a `.env.local` file and add the following variable:
+```
+NEXT_PUBLIC_CANISTER_ID_BACKEND=<your_backend_canister_id>
+```
+You can obtain `<your_backend_canister_id>` by running `dfx canister create backend`.
 
-## Deploy on Vercel
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Feel free to submit pull requests and issues to improve the template.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is licensed under the MIT License.
